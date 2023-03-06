@@ -256,7 +256,7 @@ begin
     begin
      spacedData[i*2]:=Fdata[i];
     end;
-    FDiscDrive.Write(Fdata[0],Length(spacedData));
+    FDiscDrive.Write(spacedData[0],Length(spacedData));
     setLength(spacedData,0);
    end
    else
