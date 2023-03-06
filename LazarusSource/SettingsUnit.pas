@@ -68,6 +68,7 @@ type
   CompressUEF,
   ScanSubDirs,
   OpenDOS: TGJHTickBox;
+  AdfsPadding: TGJHTickBox;
   CancelButton,
   OKButton: TGJHButton;
   procedure FormCreate(Sender: TObject);
@@ -246,7 +247,10 @@ begin
  OpenDOS:=CreateTickBox('Open DOS partitions on ADFS',MiscPanel);
  OpenDOS.Top:=ScanSubDirs.Top+ScanSubDirs.Height+Round(4*ratio);
  OpenDOS.Left:=ScanSubDirs.Left;
- MiscPanel.Height:=CompressUEF.Top+CompressUEF.Height+Round(8*ratio);
+ AdfsPadding:=CreateTickBox('Pad ADFS hard disc images on save',MiscPanel);
+ AdfsPadding.Top:=OpenDOS.Top+OpenDOS.Height+Round(4*ratio);
+ AdfsPadding.Left:=OpenDOS.Left;
+ MiscPanel.Height:=CompressUEF.Top+CompressUEF.Height+Round(12*ratio);
  //Move the panels up/down
  DFSPanel.Top:=TexturePanel.Top+TexturePanel.Height;
  InterleavePanel.Top:=DFSPanel.Top;

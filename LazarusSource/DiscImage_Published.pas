@@ -227,10 +227,12 @@ end;
 {-------------------------------------------------------------------------------
 Saves an image to a file
 -------------------------------------------------------------------------------}
-function TDiscImage.SaveToFile(filename: String;uncompress: Boolean=False): Boolean;
+function TDiscImage.SaveToFile(filename: String;uncompress: Boolean=False; adfsPadding: Boolean = False): Boolean;
 var
  FDiscDrive: TFileStream;
  ext: String;
+ spacedData: TDIByteArray;
+ i: integer;
 begin
  Result:=False;
  //Validate the filename
@@ -247,8 +249,22 @@ begin
    FDiscDrive:=TFileStream.Create(filename,fmCreate OR fmShareDenyNone);
    //Move to the beginning of the stream
    FDiscDrive.Position:=0;
-   //Read the image into the data buffer
-   FDiscDrive.Write(Fdata[0],Length(Fdata));
+   if ((GetMajorFormatNumber=diAcornADFS) and (GetMinorFormatNumber=15) and adfsPadding) then
+   begin
+    setLength(spacedData,Length(Fdata)*2);
+    for i:=0 to Length(Fdata)-1 do
+    begin
+     spacedData[i*2]:=Fdata[i];
+    end;
+    FDiscDrive.Write(Fdata[0],Length(spacedData));
+    setLength(spacedData,0);
+   end
+   else
+   begin
+    //Read the image into the data buffer
+    FDiscDrive.Write(Fdata[0],Length(Fdata));
+   end;
+
    //Close the stream
    FDiscDrive.Free;
    //Change the image's filename

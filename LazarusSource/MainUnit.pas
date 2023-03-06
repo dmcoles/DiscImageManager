@@ -475,6 +475,8 @@ type
     FScanSubDirs  :Boolean;
     //Open DOS Partitions on ADFS
     FOpenDOS      :Boolean;
+    //Pad adfs hard disk images to 512 byte sectors (eg pad alternate bytes with 0)
+    FAdfsPadding  :Boolean;
     //What are we running on?
     platform,
     arch          :String;
@@ -3488,6 +3490,8 @@ begin
  FScanSubDirs  :=DIMReg.GetRegValB('Scan_SubDirs',True);
  //Open DOS Partitions on ADFS
  FOpenDOS      :=DIMReg.GetRegValB('Open_DOS',True);
+ //pad adfs partitions on save
+ FAdfsPadding  :=DIMReg.GetRegValB('Adfs_Pad',True);
  //View menu options
  ViewOptions   :=DIMReg.GetRegValI('View_Options',$FFFF);
  //Toolbar order - this doesn't work currently
@@ -3603,7 +3607,7 @@ begin
  If SaveImage.Execute then
  begin
   //Save the image
-  Image.SaveToFile(SaveImage.FileName,FUEFCompress);
+  Image.SaveToFile(SaveImage.FileName,FUEFCompress,fAdfsPadding);
   Caption:=ApplicationTitle+' - '+ExtractFileName(Image.Filename);
   HasChanged:=False;
   //Update the status bar
@@ -5163,6 +5167,7 @@ begin
  SettingsForm.CompressUEF.Ticked           :=FUEFCompress;
  SettingsForm.ScanSubDirs.Ticked           :=FScanSubDirs;
  SettingsForm.OpenDOS.Ticked               :=FOpenDOS;
+ SettingsForm.AdfsPadding.Ticked           :=FAdfsPadding;
  //Show the form, modally
  SettingsForm.ShowModal;
  if SettingsForm.ModalResult=mrOK then
@@ -5186,6 +5191,7 @@ begin
   FUEFCompress  :=SettingsForm.CompressUEF.Ticked;
   FScanSubDirs  :=SettingsForm.ScanSubDirs.Ticked;
   FOpenDOS      :=SettingsForm.OpenDOS.Ticked;
+  FAdfsPadding  :=SettingsForm.AdfsPadding.Ticked;
   //Save the settings
   SaveConfigSettings;
   //Change the tile under the filetype
@@ -5224,6 +5230,7 @@ begin
  DIMReg.SetRegValB('DFS_Allow_Blanks', FDFSAllowBlank);
  DIMReg.SetRegValB('Scan_SubDirs',     FScanSubDirs);
  DIMReg.SetRegValB('Open_DOS',         FOpenDOS);
+ DIMReg.SetRegValB('Adfs_Pad',         FAdfsPadding);
  DIMReg.SetRegValB('UEF_Compress',     FUEFCompress);
 end;
 

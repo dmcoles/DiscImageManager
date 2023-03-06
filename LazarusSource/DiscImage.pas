@@ -550,7 +550,7 @@ type
   function LoadFromFile(filename: String;readdisc: Boolean=True): Boolean;
   function IDImage: Boolean;
   procedure ReadImage;
-  function SaveToFile(filename: String;uncompress: Boolean=False): Boolean;
+  function SaveToFile(filename: String;uncompress: Boolean=False; adfsPadding: Boolean = False): Boolean;
   procedure Close;
   function FormatFDD(major:Word;minor:Byte=0;tracks: Byte=0;
                                                   filename: String=''): Boolean;

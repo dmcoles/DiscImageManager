@@ -13,6 +13,8 @@ var
  dr_size,
  dr_ptr,
  zone     : Cardinal;
+ doubleSpaced: boolean;
+ i : integer;
 begin
  Result:=False;
  if FFormat=diInvalidImg then
@@ -24,6 +26,13 @@ begin
   //Is there actually any data?
   if GetDataLength>0 then
   begin
+   doubleSpaced:=true;
+   for i:=0 To Length(fData) div 2 -1 do if fData[i*2+1]<>0 then doubleSpaced:=false;
+   if doubleSpaced then
+   begin
+     for i:=0 To Length(fData) div 2 -1 do fData[i]:=fData[i*2];
+     SetLength(fData,Length(fData) div 2);
+   end;
    //Check for Old Map
    Check0   :=ReadByte($0FF);
    Check1   :=ReadByte($1FF);
